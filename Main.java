@@ -6,15 +6,6 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-	// write your code here
-       // byte age = 23;
-       // if (age == 23) {
-       //     System.out.println(true);
-       // } else {
-       //     System.out.println(false);
-       // }
-       // System.out.println("Your age is : " + age);
-
 
         Scanner scanner = new Scanner(System.in);
         // Principal
