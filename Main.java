@@ -5,61 +5,56 @@ import java.util.Scanner;
 
 public class Main {
 
+    static short percent = 100;
+    static short monthsInAYear = 12;
+    // Money you take from the bank
+    static float principal = (float)readNumber("Principal($1k - $1M) : ", 1000, 1_000_000);
+    // Annual Interest for the money
+    static double annualInterest = (readNumber("Annual Rate : ", 1, 30) / percent) / monthsInAYear;
+    // Years that you need to pay
+    static byte years = (byte)(readNumber("Period(Years) : ", 1, 30) * monthsInAYear);
+    // Money that you need to pay every month
+    static double mortgage = calculateMortgage(principal, annualInterest, years);
+
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
-        // Principal
-
-            float principal = 0;
-            double annualRate = 0;
-
-            while(true) {
-                System.out.print("Principal ($1k - $1M) : ");
-                principal = Float.parseFloat(scanner.nextLine().trim());
-
-                if (principal >= 1000 && principal <= 1_000_000) {
-                    break;
-                } else {
-                    System.out.println("Enter a number between 1,000 and 1,000,000");
-                    continue;
-                }
-            }
-
-            while(true) {
-
-                System.out.print("Annual interest rate : ");
-                annualRate = Double.parseDouble(scanner.nextLine().trim());
-
-                if (annualRate > 0 && annualRate <= 30) {
-                    annualRate = (annualRate / 100) / 12;
-                    break;
-                } else {
-                    System.out.println("Enter a value greater than 0 and less than or equal 30.");
-                    continue;
-                }
-            }
-
-            while (true) {
-
-                // Period
-                System.out.print("Period (Years) : ");
-                double period = Double.parseDouble(scanner.nextLine().trim());
-                if(period >= 1 && period <= 30) {
-
-                    period *= 12;
-                    // Total
-                    double total = principal * ((annualRate * Math.pow((1 + annualRate), period)) / (Math.pow((1 + annualRate), period) - 1));
-
-                    NumberFormat currency = NumberFormat.getCurrencyInstance();
-                    String result = currency.format(total);
-                    System.out.println("Mortgage : " + result);
-                    break;
-
-                } else {
-                    System.out.println("Enter a value between 1 and 30.");
-                    continue;
-                }
+            NumberFormat currency = NumberFormat.getCurrencyInstance();
+            String result = currency.format(mortgage);
+            System.out.println(" ");
+            System.out.println("Mortgage");
+            System.out.println("----------");
+            System.out.println("Monthly Payments : " + result);
+            System.out.println(" ");
+            System.out.println("Payments Schedule");
+            System.out.println("----------------");
+            for(short month = 1; month <= years; month++) {
+                double paymentSchedule = calculatePayment(principal, annualInterest, years, month);
+                String payment = currency.format(paymentSchedule);
+                System.out.println(payment);
             }
 
     }
+
+    public static double readNumber(String prompt, double min, double max){
+        Scanner scanner = new Scanner(System.in);
+        double value; // Is the user input
+        while(true) {
+            System.out.print(prompt);
+            value = scanner.nextFloat();
+            if(value >= min && value <= max)
+                break;
+            System.out.println("Enter a value between " + min + " and " + max); // else
+        }
+        return value;
+    }
+
+    public static double calculateMortgage(float principal, double annualRate, byte period){
+        return principal * ((annualRate * Math.pow((1 + annualRate), period)) / (Math.pow((1 + annualRate), period) - 1));
+    }
+
+    public static double calculatePayment(float principal, double annualInterest, byte period, short month){
+        return principal * (Math.pow(1 + annualInterest, period) - Math.pow(1 + annualInterest, month))
+            /(Math.pow(1 + annualInterest, period) - 1);
+    }
 }
+
