@@ -10,7 +10,7 @@ public class Main {
     private static double annualInterest = (Console.readNumber("Annual Rate : ", 1, 30) / percent) / monthsInAYear;
     // Years that you need to pay
     private static byte years = (byte)(Console.readNumber("Period(Years) : ", 1, 30) * monthsInAYear);
-    // Money that you need to pay every month
+  
 
 
     public static void main(String[] args) {
